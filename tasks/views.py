@@ -73,22 +73,21 @@ def task_list_api(request):
             return Response(TaskSerializer(task).data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-@api_view(['GET','PUT','DELETE'])
+@api_view(["GET", "PATCH", "DELETE"])
 @permission_classes([IsAuthenticated])
-def task_detail_api(request,task_id):
-    
-    task= get_object_or_404(Task,id=task_id, user=request.user)
+def task_detail_api(request, task_id):
+    task = get_object_or_404(Task, id=task_id, user=request.user)
 
-    if request.method=="GET":
-        serializer=TaskSerializer(task)
+    if request.method == "GET":
+        serializer = TaskSerializer(task)
         return Response(serializer.data)
-    
-    if request.method=="PUT":
-        serializer=TaskSerializer(task,data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    if request.method=="DELETE":
+
+    if request.method == "PATCH":
+        # toggle completed
+        task.completed = not task.completed
+        task.save()
+        return Response(TaskSerializer(task).data)
+
+    if request.method == "DELETE":
         task.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({"message": "Task deleted"}, status=status.HTTP_204_NO_CONTENT)
