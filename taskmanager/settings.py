@@ -43,11 +43,13 @@ INSTALLED_APPS = [
     'tasks',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',
 
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -148,3 +150,4 @@ REST_FRAMEWORK = {
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+CORS_ALLOW_ALL_ORIGINS = True
