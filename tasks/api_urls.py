@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import task_detail_api, task_list_api
+from .views import task_detail_api, task_list_api,signup_api
 
 urlpatterns=[
     path("tasks/",task_list_api,name="api_tasks"),
