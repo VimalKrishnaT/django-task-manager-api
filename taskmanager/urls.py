@@ -22,7 +22,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home,name="home"),
-     path("signup/",signup,name='signup'),
+    path("signup/",signup,name='signup'),
     path('toggle/<int:task_id>/', toggle_task, name="toggle"),
     path('delete/<int:task_id>', delete_task ,name="delete"),
 

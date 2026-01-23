@@ -31,6 +31,20 @@ def home(request):
     return render(request, "home.html", {"tasks": tasks, "form": form})
 
 
+@api_view(["POST"])
+def signup_api(request):
+    username = request.data.get("username")
+    password = request.data.get("password")
+
+    if not username or not password:
+        return Response({"error": "Missing fields"}, status=400)
+
+    if User.objects.filter(username=username).exists():
+        return Response({"error": "Username already exists"}, status=400)
+
+    user = User.objects.create_user(username=username, password=password)
+    return Response({"message": "User created"}, status=201)
+
 def signup(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
