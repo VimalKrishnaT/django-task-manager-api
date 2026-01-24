@@ -51,10 +51,8 @@ def signup_api(request):
         )
 
     if User.objects.filter(username=username).exists():
-        return Response(
-            {"error": "Username already exists"},
-            status=status.HTTP_400_BAD_REQUEST
-        )
+        return Response({"message": "User already exists"}, status=200)
+
 
     user = User.objects.create_user(
         username=username,
