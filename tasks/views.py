@@ -38,6 +38,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 
+from rest_framework.authtoken.models import Token
+
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def signup_api(request):
@@ -45,24 +47,18 @@ def signup_api(request):
     password = request.data.get("password")
 
     if not username or not password:
-        return Response(
-            {"error": "Username and password required"},
-            status=status.HTTP_400_BAD_REQUEST
-        )
+        return Response({"error": "Username and password required"}, status=400)
 
     if User.objects.filter(username=username).exists():
-        return Response({"message": "User already exists"}, status=200)
+        return Response({"error": "User already exists"}, status=400)
 
+    user = User.objects.create_user(username=username, password=password)
+    token, _ = Token.objects.get_or_create(user=user)
 
-    user = User.objects.create_user(
-        username=username,
-        password=password
-    )
-
-    return Response(
-        {"message": "User created successfully"},
-        status=status.HTTP_201_CREATED
-    )
+    return Response({
+        "message": "User created successfully",
+        "token": token.key
+    }, status=201)
 
 
 def signup(request):
